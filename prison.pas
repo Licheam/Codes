@@ -40,17 +40,17 @@ begin
 end;
 	
 procedure add(x,y:longint);
-var p:node;
+var p,q:node;
 begin
-	writeln('adding x:',x,' y:',y);
+	//writeln('adding x:',x,' y:',y);
 	new(p);
 	p^.data:=y;
 	p^.next:=bg[x];
-	dispose(p);
-	new(p);
-	p^.data:=x;
-	p^.next:=bg[y];
-	dispose(p);
+	bg[x]:=p;
+	new(q);
+	q^.data:=x;
+	q^.next:=bg[y];
+	bg[y]:=q;
 end;
 
 function dye(x:longint):longint;
@@ -60,30 +60,36 @@ begin
 end;
 
 function check(l,r:longint):longint;
-var mid,j,k:longint;
+var mid,j:longint;
+	p:node;
 begin
-	writeln('checking l:',l,' r:',r);
-	if l=r then exit(c[l]);
-	for j:=1 to n do bg[j]:=nil;
+	//writeln('checking l:',l,' r:',r);
+	for j:=1 to n do
+	begin
+		bg[j]:=nil;
+		color[j]:=0;
+	end;
 	mid:=(l+r)div 2;
 	for j:=1 to mid do
 	add(a[j],b[j]);
-	fillchar(color,sizeof(color),0);
 	for j:=1 to n do
 	begin
+		if bg[j]=nil then continue;
 		if color[j]=0 then
 		color[j]:=1;
-		k:=j;
-		while bg[k]^.next<>nil do
-		begin
-			writeln('ok');
-			if color[bg[k]^.data]=0 then
-			color[bg[k]^.data]:=dye(color[k])
-			else if color[bg[k]^.data]<>dye(color[k]) then exit(check(l,mid));
-			k:=bg[k]^.data;
-		end;
+		p:=bg[j];
+		repeat
+			//writeln('color[',p^.data,']=',color[p^.data]);
+			if color[p^.data]=0 then
+			color[p^.data]:=dye(color[j])
+			else if color[p^.data]<>dye(color[j]) then 
+			if l=r then exit(c[l])
+			else exit(check(l,mid));
+			p:=p^.next;
+		until p=nil;
 	end;
-	exit(check(mid+1,r));
+	if l=r then exit(0)
+	else exit(check(mid+1,r));
 end;
 	
 begin
@@ -91,11 +97,76 @@ begin
 	for i:=1 to m do
 	readln(a[i],b[i],c[i]);
 	qs(1,m);
-	writeln('qs over');
-	for i:=1 to m do
-	writeln(a[i],' ',b[i],' ',c[i]);
-	writeln(c[check(1,m)]);
+	//writeln('qs over');
+	//for i:=1 to m do
+	//writeln(a[i],' ',b[i],' ',c[i]);
+	writeln(check(1,m));
 end.
+
+
+
+
+var n,m,i:longint;
+	a,b,c:array[1..100000]of longint;
+	father:array[1..40000]of longint;
+	
+procedure swap(var x,y:longint);
+var t:longint;
+begin	
+	t:=x;
+	x:=y;
+	y:=t;
+end;
+	
+procedure qs(l,r:longint);//降序
+var x,y,k:longint;
+begin
+	x:=l;y:=r;
+	k:=c[(l+r)div 2];
+	repeat
+		while c[x]>k do inc(x);
+		while c[y]<k do dec(y);
+		if x<=y then
+		begin
+			swap(c[x],c[y]);
+			swap(a[x],a[y]);
+			swap(b[x],b[y]);
+			inc(x);
+			dec(y);
+		end;
+	until x>y;
+	if l<y then qs(l,y);
+	if r>x then qs(x,r);
+end;
+	
+function find(x:longint):longint;
+begin
+	
+end;
+	
+	
+begin
+	readln(n,m);
+	for i:=1 to m do
+	readln(a[i],b[i],c[i]);
+	qs(1,m);
+	for i:=1 to n do father[i]:=i;
+	for i:=1 to m do
+	begin
+		if (father[a[i]]=a[i])and(father[b[i]]=b[i]) then
+		father[b[i]]=a[i]+n
+		else if (find(a[i])<>a[i])and(father[b[i]])
+	end;
+end.
+
+
+
+
+
+
+
+
+
 4 6
 1 2 28351
 3 4 12884
