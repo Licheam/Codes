@@ -19,7 +19,7 @@ begin
 	y:=t;
 end;
 	
-procedure qs(l,r:longint);//降序
+procedure qs(l,r:longint);//descend
 var x,y,k:longint;
 begin
 	x:=l;y:=r;
@@ -67,7 +67,6 @@ begin
 	else bool[x]:=true;
 	p:=bg[x];
 	repeat
-		//writeln('color[',p^.data,']=',color[p^.data]);
 		if color[p^.data]=0 then
 		color[p^.data]:=reverse(color[x])
 		else if color[p^.data]<>reverse(color[x]) then exit(false);
@@ -80,7 +79,6 @@ end;
 function check(l,r:longint):longint;
 var mid,j:longint;
 begin
-	//writeln('checking l:',l,' r:',r);
 	for j:=1 to n do
 	begin
 		bg[j]:=nil;
@@ -105,28 +103,18 @@ begin
 end;
 	
 begin
-	{assign(input,'prison.in');
-	assign(output,'prison.out');
-	reset(input);
-	rewrite(output);}
 	readln(n,m);
 	for i:=1 to m do
 	readln(a[i],b[i],c[i]);
 	qs(1,m);
-	//writeln('qs over');
-	//for i:=1 to m do
-	//writeln(a[i],' ',b[i],' ',c[i]);
 	writeln(check(1,m));
-	//close(input);
-	//close(output);
 end.
+//二分图
 
-
-
-
-var n,m,i:longint;
+//并查集
+var n,m,i,ra,rb:longint;
 	a,b,c:array[1..100000]of longint;
-	father:array[1..40000]of longint;
+	fa:array[1..40000]of longint;
 	
 procedure swap(var x,y:longint);
 var t:longint;
@@ -136,7 +124,7 @@ begin
 	y:=t;
 end;
 	
-procedure qs(l,r:longint);//降序
+procedure qs(l,r:longint);//descend
 var x,y,k:longint;
 begin
 	x:=l;y:=r;
@@ -157,32 +145,37 @@ begin
 	if r>x then qs(x,r);
 end;
 	
-function find(x:longint):longint;
+function oppo(x:longint):longint;
 begin
-	
+	if x>n then exit(x-n)
+	else exit(x+n);
 end;
 	
+function find(x:longint):longint;
+begin
+	if fa[x]<>x then exit(find(fa[x]))
+	else exit(x);
+end;
 	
 begin
 	readln(n,m);
 	for i:=1 to m do
 	readln(a[i],b[i],c[i]);
 	qs(1,m);
-	for i:=1 to n do father[i]:=i;
+	for i:=1 to 2*n do
+	fa[i]:=i;
 	for i:=1 to m do
 	begin
-		if (father[a[i]]=a[i])and(father[b[i]]=b[i]) then
-		father[b[i]]=a[i]+n
-		else if (find(a[i])<>a[i])and(father[b[i]])
+		ra:=find(a[i]);
+		rb:=find(b[i]);
+		if ra=rb then break//a,b in same set
+		else
+		begin
+			fa[rb]:=oppo(ra);
+			fa[oppo(rb)]:=ra;
+		end;
 	end;
+	if ra=rb then
+	writeln(c[i])
+	else writeln(0);
 end.
-
-
-4 6
-1 2 28351
-3 4 12884
-1 3 6618
-2 3 3512
-1 4 2534
-2 4 1805
-0 0 0
