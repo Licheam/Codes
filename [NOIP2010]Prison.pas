@@ -1,3 +1,82 @@
+//并查集
+var n,m,i,ra,rb:longint;
+	a,b,c:array[1..100000]of longint;
+	fa:array[1..40000]of longint;
+	
+procedure swap(var x,y:longint);
+var t:longint;
+begin	
+	t:=x;
+	x:=y;
+	y:=t;
+end;
+	
+procedure qs(l,r:longint);//descend
+var x,y,k:longint;
+begin
+	x:=l;y:=r;
+	k:=c[(l+r)div 2];
+	repeat
+		while c[x]>k do inc(x);
+		while c[y]<k do dec(y);
+		if x<=y then
+		begin
+			swap(c[x],c[y]);
+			swap(a[x],a[y]);
+			swap(b[x],b[y]);
+			inc(x);
+			dec(y);
+		end;
+	until x>y;
+	if l<y then qs(l,y);
+	if r>x then qs(x,r);
+end;
+	
+function oppo(x:longint):longint;
+begin
+	if x>n then exit(x-n)
+	else exit(x+n);
+end;
+	
+function find(x:longint):longint;
+var	j,t:longint;
+	path:array[1..40000]of longint;
+begin
+	t:=0;
+	find:=x;
+	while fa[find]<>find do
+	begin
+		inc(t);
+		path[t]:=find;
+		find:=fa[find];
+	end;
+	for j:=1 to t-1 do fa[path[i]]:=find;
+end;
+	
+begin
+	readln(n,m);
+	for i:=1 to m do
+	readln(a[i],b[i],c[i]);
+	qs(1,m);
+	for i:=1 to 2*n do
+	fa[i]:=i;
+	for i:=1 to m do
+	begin
+		ra:=find(a[i]);
+		rb:=find(b[i]);
+		if ra=rb then break//a,b in same set
+		else
+		begin
+			fa[rb]:=oppo(ra);
+			fa[oppo(rb)]:=ra;
+		end;
+	end;
+	if ra=rb then
+	writeln(c[i])
+	else writeln(0);
+end.
+
+//二分图
 type
 	node=^link;
 	link=record
@@ -108,74 +187,4 @@ begin
 	readln(a[i],b[i],c[i]);
 	qs(1,m);
 	writeln(check(1,m));
-end.
-//二分图
-
-//并查集
-var n,m,i,ra,rb:longint;
-	a,b,c:array[1..100000]of longint;
-	fa:array[1..40000]of longint;
-	
-procedure swap(var x,y:longint);
-var t:longint;
-begin	
-	t:=x;
-	x:=y;
-	y:=t;
-end;
-	
-procedure qs(l,r:longint);//descend
-var x,y,k:longint;
-begin
-	x:=l;y:=r;
-	k:=c[(l+r)div 2];
-	repeat
-		while c[x]>k do inc(x);
-		while c[y]<k do dec(y);
-		if x<=y then
-		begin
-			swap(c[x],c[y]);
-			swap(a[x],a[y]);
-			swap(b[x],b[y]);
-			inc(x);
-			dec(y);
-		end;
-	until x>y;
-	if l<y then qs(l,y);
-	if r>x then qs(x,r);
-end;
-	
-function oppo(x:longint):longint;
-begin
-	if x>n then exit(x-n)
-	else exit(x+n);
-end;
-	
-function find(x:longint):longint;
-begin
-	if fa[x]<>x then exit(find(fa[x]))
-	else exit(x);
-end;
-	
-begin
-	readln(n,m);
-	for i:=1 to m do
-	readln(a[i],b[i],c[i]);
-	qs(1,m);
-	for i:=1 to 2*n do
-	fa[i]:=i;
-	for i:=1 to m do
-	begin
-		ra:=find(a[i]);
-		rb:=find(b[i]);
-		if ra=rb then break//a,b in same set
-		else
-		begin
-			fa[rb]:=oppo(ra);
-			fa[oppo(rb)]:=ra;
-		end;
-	end;
-	if ra=rb then
-	writeln(c[i])
-	else writeln(0);
 end.
