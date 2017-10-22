@@ -39,18 +39,10 @@ begin
 end;
 	
 function find(x:longint):longint;
-var	j,t:longint;
-	path:array[1..40000]of longint;
 begin
-	t:=0;
-	find:=x;
-	while fa[find]<>find do
-	begin
-		inc(t);
-		path[t]:=find;
-		find:=fa[find];
-	end;
-	for j:=1 to t-1 do fa[path[i]]:=find;
+	if fa[x]=x then exit(x);
+	fa[x]:=find(fa[x]);
+	exit(fa[x]);
 end;
 	
 begin
