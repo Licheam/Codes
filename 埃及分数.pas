@@ -50,7 +50,6 @@ begin
 	x:=x div t;y:=y div t;
 	b:=false;
 	t:=max(getfir(x,y),d+1);
-	p:=(min-time)*y div x;
 	for t:=max(getfir(x,y),d+1) to (min-time)*y div x do
 	if dfs(t,time+1,x,y) then b:=true;
 	exit(b);
