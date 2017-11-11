@@ -1,59 +1,78 @@
+const maxn=100000;
 var n,i,len:longint;
-	a,b:array[1..100000]of longint;
-	s:array[1..200000]of longint;
-	
-procedure swap(x,y:longint);
-var k:longint;
-begin
-	k:=s[x];
-	s[x]:=s[y];
-	s[y]:=k;
-end;
+    a,b,s,pa,pb,ta:array[1..maxn]of longint;
 
-procedure up(x:longint);
+procedure swap(var x,y:longint);
+var t:longint;
 begin
-	if(x>1)and(s[x div 2]<s[x])then
-	begin 
-		swap(x div 2,x);
-		up(x div 2);
-	end;
+    t:=x;
+    x:=y;
+    y:=t;
 end;
 
 procedure down(x:longint);
+var t:longint;
 begin
-	if(2*x<=len)and(s[2*x]>s[x])and(s[2*x+1]<=s[2*x]) then
-	begin
-		swap(2*x,x);
-		down(2*x);
-	end
-	else if(2*x+1<=len)and(s[2*x+1]>s[x])and(s[2*x+1]>s[2*x]) then
-	begin
-		swap(2*x+1,x);
-		down(2*x+1);
-	end;
-end;
-
-procedure insert(x:longint);
-begin
-	inc(len);
-	s[len]:=x;
-	up(len);
+    t:=x shl 1;
+    if t>len then exit
+    else if (t<len)and(s[t]>s[t+1]) then inc(t);
+    if s[t]<s[x] then
+    begin
+        swap(s[x],s[t]);
+        swap(pa[x],pa[t]);
+        swap(pb[x],pb[t]);
+        down(t);
+    end;
 end;
 
 procedure delete(x:longint);
 begin
-	s[x]:=s[len];
-	dec(len);
-	down(x);
+    s[x]:=s[len];
+    pa[x]:=pa[len];
+    pb[x]:=pb[len];
+    dec(len);
+    down(x);
 end;
-	
-	
+
+procedure up(x:longint);
+var t:longint;
 begin
-	readln(n);
-	for i:=1 to n do
-	read(a[i]);
-	for i:=1 to n do
-	read(b[i]);
-	len:=0;
-	insert();
+    if x<=1 then exit;
+    t:=x shr 1;
+    if s[x]<s[t] then
+    begin
+        swap(s[x],s[t]);
+        swap(pa[x],pa[t]);
+        swap(pb[x],pb[t]);
+        up(t);
+    end;
 end;
+
+procedure insert(x,y,z:longint);
+begin
+    inc(len);
+    s[len]:=x;
+    pa[len]:=y;
+    pb[len]:=z;
+    up(len);
+end;
+
+begin
+    readln(n);
+    for i:=1 to n do read(a[i]);
+    for i:=1 to n do read(b[i]);
+    filldword(ta,n,1);//b to a第几个
+    len:=0;
+    for i:=1 to n do
+    insert(a[1]+b[i],1,i);
+    for i:=1 to n do
+    begin
+        write(s[1],' ');
+        if (pa[1]<n)and(ta[pb[1]]<=pa[1]) then//加个判重
+        begin
+            insert(a[pa[1]+1]+b[pb[1]],pa[1]+1,pb[1]);
+            ta[pb[1]]:=pa[1]+1;
+        end;
+        delete(1);
+    end;
+end.
