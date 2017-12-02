@@ -1,11 +1,11 @@
-const maxn=100000000;
-    maxp=45000;
-var n,p,i,j,t1,t2:longint;
+const maxn=50000000;
+    maxp=50000;
+var n,p,i,j,t:longint;
     ans:Int64;
     pre,del:array[0..maxp]of longint;
 
-function binpow(x,y,m:Int64):Int64;
-var r:Int64;
+function binpow(x,y,m:longint):longint;
+var r:longint;
 begin
     r:=1;
     while y<>0 do
@@ -18,10 +18,6 @@ begin
 end;
 
 begin
-    assign(input,'question.in');
-    assign(output,'question.out');
-    reset(input);
-    rewrite(output);
     readln(n,p);//n>p
     ans:=0;
     del[p]:=0;
@@ -40,8 +36,8 @@ begin
     ans:=ans mod p;
     if i<>n then
     begin
-        t1:=n div p;
-        for i:=2 to t1 do
+        t:=n div p;
+        for i:=2 to t do
         begin
             for j:=1 to p-1 do
             begin
@@ -50,14 +46,12 @@ begin
             end;
             ans:=ans mod p;
         end;
-        t1:=n mod p;
-        for j:=1 to t1 do
+        t:=n mod p;
+        for j:=1 to t do
         begin
             pre[j]:=pre[j]*del[j] mod p;
             ans:=(ans+pre[j])mod p;
         end;
     end;
-    writeln(ans);
-    close(input);
-    close(output);
+    writeln(ans mod p);
 end.
