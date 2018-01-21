@@ -15,11 +15,7 @@ begin
     begin
         for j:=0 to n-1 do
         if i=j then ma[i,j]:=0
-        else
-        begin
-            ma[i,j]:=100001;
-            ma[j,i]:=100001;
-        end;
+        else ma[i,j]:=100001;
     end;
     for i:=1 to m do
     begin
