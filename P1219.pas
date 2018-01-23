@@ -3,6 +3,7 @@ var n,i,cnt:longint;
     ans:array[1..maxn]of longint;
     column:array[1..maxn]of boolean;
     lr,rl:array[1..2*maxn]of boolean;
+    
 procedure print();
 var i:longint;
 begin
