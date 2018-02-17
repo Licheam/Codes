@@ -4,7 +4,7 @@ type edge=record
     next:longint;
     node:longint;
     end;
-var n,m,tot,i,u,v,q,cnt,p:longint;
+var n,m,tot,i,u,v,q,cnt,top:longint;
     head,indgr,list,stack,dp:array[1..maxn]of longint;
     flag:array[1..maxn]of boolean;
     e:array[1..maxm]of edge;
@@ -20,7 +20,7 @@ end;
 begin
     readln(n,m);
     filldword(head,n,0);
-    filldword(indgr,n,0);
+    filldword(indgr,n,0);//入度
     tot:=0;
     for i:=1 to m do
     begin
@@ -29,19 +29,19 @@ begin
         inc(indgr[u]);
     end;
     cnt:=0;
-    p:=0;
+    top:=0;
     fillchar(flag,n,false);
     for i:=1 to n do
     begin
         if (flag[i])or(indgr[i]<>0) then continue;
-        inc(p);
-        stack[p]:=i;
+        inc(top);
+        stack[top]:=i;
         while p<>0 do
         begin
-            u:=stack[p];
+            u:=stack[top];
             inc(cnt);
             list[cnt]:=u;
-            dec(p);
+            dec(top);
             flag[u]:=true;
             q:=head[u];
             while q<>0 do
@@ -49,8 +49,8 @@ begin
                 dec(indgr[e[q].node]);
                 if indgr[e[q].node]=0 then
                 begin
-                    inc(p);
-                    stack[p]:=e[q].node;
+                    inc(top);
+                    stack[top]:=e[q].node;
                 end;
                 q:=e[q].next;
             end;
