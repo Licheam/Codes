@@ -4,10 +4,11 @@ type edge=record
     next:longint;
     node:longint;
     end;
-var n,m,tot,i,u,v,q,cnt,top:longint;
-    head,indgr,list,stack,dp:array[1..maxn]of longint;
-    flag:array[1..maxn]of boolean;
+
+var n,m,i,tot,f,g,cnt,top:longint;
+    head,indgr,list,stack,vis:array[1..maxn]of longint;
     e:array[1..maxm]of edge;
+    flag:array[1..maxn]of boolean;
 
 procedure add(x,y:longint);
 begin
@@ -17,17 +18,9 @@ begin
     head[x]:=tot;
 end;
 
+procedure khan();
+var i,p,u,v:longint;
 begin
-    readln(n,m);
-    filldword(head,n,0);
-    filldword(indgr,n,0);//入度
-    tot:=0;
-    for i:=1 to m do
-    begin
-        readln(u,v);
-        add(v,u);
-        inc(indgr[u]);
-    end;
     cnt:=0;
     top:=0;
     fillchar(flag,n,false);
@@ -36,40 +29,61 @@ begin
         if (flag[i])or(indgr[i]<>0) then continue;
         inc(top);
         stack[top]:=i;
-        while p<>0 do
+        flag[i]:=true;
+        while top>0 do
         begin
             u:=stack[top];
             inc(cnt);
             list[cnt]:=u;
-            dec(top);
             flag[u]:=true;
-            q:=head[u];
-            while q<>0 do
+            dec(top);
+            p:=head[u];
+            while p<>0 do
             begin
-                dec(indgr[e[q].node]);
-                if indgr[e[q].node]=0 then
+                v:=e[p].node;
+                dec(indgr[v]);
+                if indgr[v]=0 then
                 begin
                     inc(top);
-                    stack[top]:=e[q].node;
+                    stack[top]:=v;
                 end;
-                q:=e[q].next;
+                p:=e[p].next;
             end;
         end;
     end;
-    //if cnt<>n then writeln('ERROR');
-    for i:=cnt downto 1 do
+end;
+
+procedure dp();
+var i,p,u,v:longint;
+begin
+    filldword(vis,n,1);
+    for i:=1 to n do
     begin
-        //write(list[i],' ');
-        dp[list[i]]:=1;
-        q:=head[list[i]];
-        while q<>0 do
+        u:=list[i];
+        p:=head[u];
+        while p<>0 do
         begin
-            if dp[list[i]]<dp[e[q].node]+1 then
-            dp[list[i]]:=dp[e[q].node]+1;
-            q:=e[q].next;
+            v:=e[p].node;
+            if vis[v]<vis[u]+1 then
+                vis[v]:=vis[u]+1;
+            p:=e[p].next;
         end;
     end;
-    //writeln;
+end;
+
+begin
+    readln(n,m);
+    filldword(head,n,0);
+    filldword(indgr,n,0);
+    tot:=0;
+    for i:=1 to m do
+    begin
+        readln(f,g);
+        add(f,g);
+        inc(indgr[g])
+    end;
+    khan;
+    dp;
     for i:=1 to n do
-    writeln(dp[i]);
+        writeln(vis[i]);
 end.
