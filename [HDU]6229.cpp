@@ -9,8 +9,10 @@ int gcd(int x,int y) {
     return gcd(y,x%y);
 }
 
+set<pair<int,int>> s;
+
 void solve() {
-    set<pair<int,int>> s;
+    s.clear();
     int n,k,a,b;
     scanf("%d %d", &n, &k);
     if(n==1){
