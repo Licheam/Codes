@@ -1,23 +1,25 @@
+// #include <bits/stdc++.h>
 #include <cstdio>
 #include <algorithm>
-#define ULL unsigned long long
-#define MAXN 1005
-
-const double eps=1e-5;
-
 using namespace std;
+#define LL long long
+#define MAXN 1005
+const double eps=1e-6;
 
-int n,k,a[MAXN],b[MAXN];
+int a[MAXN],b[MAXN];
 double d[MAXN];
 
-int main(){
-    while(~scanf("%d %d",&n,&k) && (n!=0 || k!=0)){
+void solve() {
+    int n,k;
+    while(~scanf("%d %d", &n, &k)){
+        if(!n && !k) return;
         for(int i=1;i<=n;i++)
-            scanf("%d",&a[i]);
+            scanf("%d", &a[i]);
         for(int i=1;i<=n;i++)
-            scanf("%d",&b[i]);
+            scanf("%d", &b[i]);
+
         double l=0,r=1;
-        while(r-l>eps){
+        while(r-l>eps) {
             double mid=(l+r)/2;
             for(int i=1;i<=n;i++)
                 d[i]=a[i]-mid*b[i];
@@ -28,7 +30,15 @@ int main(){
             if(sum>0) l=mid;
             else r=mid;
         }
-        printf("%.0lf\n", l*100);
+        printf("%.0lf\n",l*100);
+    }
+}
+
+int main() {
+    int T=1;
+    // scanf("%d", &T);
+    while(T--) {
+        solve();
     }
     return 0;
 }
