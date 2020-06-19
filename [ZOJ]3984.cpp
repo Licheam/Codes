@@ -65,7 +65,7 @@ void solve() {
         int cnt=0;
         for(int p=head[u];p;p=e[p].next){
             int v=e[p].to;
-            if(flag[v] && dgr[v]<=dgr[u]){
+            if(flag[v]){
                 s[u].insert(find(v));
                 cnt++;
             }
