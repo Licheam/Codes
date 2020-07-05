@@ -14,7 +14,7 @@ int bx[MAXN],by[MAXN];
 char s[MAXN];
 int op[MAXN];
 
-void pill(int xa,int ya,int xb,int yb) {
+void pile(int xa,int ya,int xb,int yb) {
     sx[xb][yb]+=sx[xa][ya];
     sy[xb][yb]+=sy[xa][ya];
     cnt[xb][yb]+=cnt[xa][ya];
@@ -52,14 +52,14 @@ void solve() {
         int k=op[s[i]];
         px+=dx[k]; py+=dy[k];
         for(int j=1;j<=o;j++)
-            pill(px+bx[j],py+by[j],px+bx[j]+dx[k],py+by[j]+dy[k]);
+            pile(px+bx[j],py+by[j],px+bx[j]+dx[k],py+by[j]+dy[k]);
         for(int j=1;j<=n;j++){
-            pill(px+j,py,px+j+dx[k],py+dy[k]);
-            pill(px+j,py+m+1,px+j+dx[k],py+m+1+dy[k]);
+            pile(px+j,py,px+j+dx[k],py+dy[k]);
+            pile(px+j,py+m+1,px+j+dx[k],py+m+1+dy[k]);
         }
         for(int j=1;j<=m;j++){
-            pill(px,py+j,px+dx[k],py+j+dy[k]);
-            pill(px+n+1,py+j,px+n+1+dx[k],py+j+dy[k]);
+            pile(px,py+j,px+dx[k],py+j+dy[k]);
+            pile(px+n+1,py+j,px+n+1+dx[k],py+j+dy[k]);
         }
     }
 
