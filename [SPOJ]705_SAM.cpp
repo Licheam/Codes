@@ -18,6 +18,8 @@ void sam_init() {
     last=0;
 }
 
+LL ans;
+
 void sam_extend(int c) {
     int cur=++sz;
     sam[cur].len=sam[last].len+1;
@@ -42,16 +44,18 @@ void sam_extend(int c) {
                 sam[p].ch[c]=clone;
         }
     }
-
+    
     last=cur;
+    
+    ans+=sam[cur].len-sam[sam[cur].link].len;
 }
 
 char s[MAXN];
-int dp[MAXN<<1];
+LL dp[MAXN<<1];
 
-int dfs(int cur) {
+LL dfs(LL cur) {
     if(dp[cur]) return dp[cur];
-    int res=1;
+    LL res=1;
     for(int i=0;i<26;i++)
         if(sam[cur].ch[i])
             res+=dfs(sam[cur].ch[i]);
@@ -62,10 +66,11 @@ void solve() {
     scanf("%s", s);
     int len=strlen(s);
     sam_init();
+    ans=0;
     for(int i=0;i<len;i++)
         sam_extend(s[i]-'a');
-    memset(dp,0,(sz+1)*sizeof(dp[0]));
-    printf("%d\n", dfs(0)-1);
+    // memset(dp,0,(sz+1)*sizeof(dp[0]));
+    printf("%lld\n", ans);
 }
 
 int main() {
