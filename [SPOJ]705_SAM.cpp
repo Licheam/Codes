@@ -74,8 +74,6 @@ void solve() {
 }
 
 int main() {
-    srand(0);
-
     int T=1,cas=1;
     scanf("%d", &T);
     while(T--) {
