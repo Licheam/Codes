@@ -53,7 +53,7 @@ void sam_extend(int c) {
 char s[MAXN];
 LL dp[MAXN<<1];
 
-LL dfs(LL cur) {
+LL dfs(int cur) {
     if(dp[cur]) return dp[cur];
     LL res=1;
     for(int i=0;i<26;i++)
