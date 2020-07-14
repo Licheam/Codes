@@ -12,6 +12,7 @@ void solve() {
         scanf("%d", &a[i].first);
         a[i].second=i;
     }
+    for(int i=1;i<=m;i++){
         scanf("%d", &b[i].first);
         b[i].second=i;
     }
