@@ -74,7 +74,7 @@ void solve() {
         sumt[i+1]=sumt[i];
     }
     int lim;
-    for(lim=1;lim<n+m;lim<<=1);
+    for(lim=1;lim<n;lim<<=1);
     memset(ans,0,lim*sizeof(ans[0]));
     
     memset(A,0,lim*sizeof(A[0]));
