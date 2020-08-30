@@ -5,7 +5,7 @@ using namespace std;
 // const int inf=0x3f3f3f3f;
 
 struct SAM {
-    int len,link,cnt;
+    int len,link,times;
     int ch[26];
     int tag;
 }sam[MAXN<<1];
@@ -15,7 +15,7 @@ int sz,last;
 void sam_init() {
     sam[0].len=0;
     sam[0].link=-1;
-    sam[0].cnt=0;
+    sam[0].times=0;
     sam[0].tag=0;
     memset(sam[0].ch,0,sizeof(sam[0].ch));
     sz=0;
@@ -27,7 +27,7 @@ void sam_extend(int c,int stamp) {
         last=sam[last].ch[c];
         for(int cur=last;cur && sam[cur].tag!=stamp;cur=sam[cur].link) {
             sam[cur].tag=stamp;
-            sam[cur].cnt++;
+            sam[cur].times++;
         }
         return;
     }
@@ -35,7 +35,7 @@ void sam_extend(int c,int stamp) {
     int cur=++sz;
     sam[cur].len=sam[last].len+1;
     memset(sam[cur].ch,0,sizeof(sam[cur].ch));
-    sam[cur].cnt=0;
+    sam[cur].times=0;
     sam[cur].tag=0;
 
     int p=last;
@@ -66,7 +66,7 @@ void sam_extend(int c,int stamp) {
 
     last=cur;
     for(;cur && sam[cur].tag!=stamp;cur=sam[cur].link) {
-        sam[cur].cnt++;
+        sam[cur].times++;
         sam[cur].tag=stamp;
     }
 }
@@ -101,7 +101,7 @@ void solve() {
     for(int i=1;i<=sz;i++) {
         if(sam[per[i]].link) {
             dp[per[i]]=dp[sam[per[i]].link];
-            if(sam[sam[per[i]].link].cnt>=k)
+            if(sam[sam[per[i]].link].times>=k)
                 dp[per[i]]+=sam[sam[per[i]].link].len-sam[sam[sam[per[i]].link].link].len;
         }
     }
@@ -117,13 +117,11 @@ void solve() {
             }
             cur=sam[cur].ch[s[j]-'a'];
             ans+=dp[cur];
-            if(cur && sam[cur].cnt>=k)
+            if(cur && sam[cur].times>=k)
                 ans+=cnt-sam[sam[cur].link].len;
-            // printf("%d %d\n", cur,sam[cur].cnt);
         }
         printf("%lld ", ans);
     }
-    // puts("");
 }
 
 int main() {
